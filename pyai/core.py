@@ -4,7 +4,6 @@ import random
 import re
 import nltk
 import pyjokes
-from weather_news import get_weather
 import yfinance as yf
 import numpy as np
 from nltk.tokenize import word_tokenize
@@ -360,10 +359,6 @@ class ChatbotAssistant:
 
         if predicted_intent == "joke":  # If the intent is to execute joke
             return pyjokes.get_joke()
-
-        if predicted_intent == "weather":
-            city = 'India'
-            return f'The temperature in {city} is {get_weather(city)}°C.'
 
         if self.intents_responses[predicted_intent]:
             return random.choice(self.intents_responses[predicted_intent])
