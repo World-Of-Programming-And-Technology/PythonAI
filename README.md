@@ -13,6 +13,22 @@ pip install PythonAI
 pip install pyai
 ```
 
+Or,
+
+```python
+git clone https://github.com/World-Of-Programming-And-Technology/PythonAI.git
+```
+
+```python
+cd PythonAI
+```
+
+Install requirements. 
+
+```python
+pip install -r requirements.txt
+```
+
 ## Import Brain From pyai module
 
 ```python
