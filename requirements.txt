@@ -1,0 +1,6 @@
+nltk
+pyjokes
+yfinance
+numpy
+scikit-learn
+torch
