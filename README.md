@@ -1,6 +1,7 @@
 # Python AI
 
-Create AI Brain with PythonAI
+Create AI Brain with PythonAI.
+Easy to use and opensource. 
 
 ## Install
 
@@ -51,3 +52,34 @@ while True:
 ```
 
 And So on...
+
+## Why Do We Use It.
+
+It can help you to perform AI projects based on NLP (Nature Language Processing), ML (Mechine Learning) and DL (Deep Learning).
+
+> You can also make your own AI Assistance with it.
+> Give Data in intents.json file.
+
+---
+
+### Way to create intents.json file.
+
+```json
+
+{
+  "intents" :[
+        {
+        "tag" : "gretting",
+        "patterns" : ["Hi", "Hello", "Hey"],
+        "responses": ["Hi, How can I assist you today", "Hey there"]
+         },
+         {
+        "tag" : "gretting",
+        "patternss" : ["Hi", "Hello", "Hey"],
+        "response": ["Hi, How can I assist you today", "Hey there"]
+          },
+       ]
+}
+```
+
+In this way you can create your intents.json  file. If you want you can add more data also.
