@@ -88,8 +88,8 @@ In this way you can create your intents.json  file. If you want you can add more
 
 | Function And Object Name| Description |
 | :---: | :---: |
-| Brain | It is an object to create Barin by passing intents.json file |
+| Brain | It is an object to create *Barin* by passing *intents.json* file |
 | pyai_say | It is a function inside Brain class to print the answer of the given question. |
-| predict_message_type | It is use to predict the type  of questions Like the message in question format or answer or command or start or shutdown. |
-| predict_entities | It stract name, age and location form the given message. |
+| predict_message_type | It is use to predict the type  of questions Like the message in *question format* or *answer* or *command* or *start* or *shutdown*. |
+| predict_entities | It stract *name*, *age* and *location* form the given message. |
 
