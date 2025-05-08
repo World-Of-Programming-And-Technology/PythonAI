@@ -94,5 +94,4 @@ In this way you can create your intents.json  file. If you want you can add more
 | predict_entities | It stract *name*, *age* and *location* form the given message. |
 
 ---
- Open [PythonAI]
-(https://github.com/World-Of-Programming-And-Technology/PythonAI.git)
+ Open [PythonAI] (https://github.com/World-Of-Programming-And-Technology/PythonAI.git)
