@@ -93,3 +93,4 @@ In this way you can create your intents.json  file. If you want you can add more
 | predict_message_type | It is use to predict the type  of questions Like the message in *question format* or *answer* or *command* or *start* or *shutdown*. |
 | predict_entities | It stract *name*, *age* and *location* form the given message. |
 
+Open [PythonAI] (https://github.com/World-Of-Programming-And-Technology/PythonAI.git)
