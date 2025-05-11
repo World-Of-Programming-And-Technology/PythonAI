@@ -221,6 +221,149 @@ def predict_frame(sentence):
         predicted = torch.argmax(output, dim=1).item()
     return frame_map.get(predicted)
 
+class FrameClassifierAdvance(nn.Module):
+    def __init__(self, input_dim, output_dim):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(input_dim, 32),
+            nn.ReLU(),
+            nn.Linear(32, output_dim)
+        )
+
+    def forward(self, x):
+        return self.net(x)
+
+class FramePredictorAdvance:
+    def __init__(self, sentences, labels, class_map):
+        self.vectorizer = CountVectorizer()
+        self.X_train = self.vectorizer.fit_transform(sentences).toarray()
+        self.y_train = np.array(labels)
+        self.class_map = class_map
+        self.model = FrameClassifierAdvance(self.X_train.shape[1], len(class_map))
+
+    def train(self, epochs=150):
+        X_tensor = torch.tensor(self.X_train, dtype=torch.float32)
+        y_tensor = torch.tensor(self.y_train, dtype=torch.long)
+        loss_fn = nn.CrossEntropyLoss()
+        optimizer = optim.Adam(self.model.parameters(), lr=0.01)
+
+        for epoch in range(epochs):
+            self.model.train()
+            outputs = self.model(X_tensor)
+            loss = loss_fn(outputs, y_tensor)
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            if (epoch + 1) % 10 == 0:
+                print(f"Epoch [{epoch+1}/{epochs}], Loss: {loss.item():.4f}")
+        print("Frame Classifier Training Complete!")
+
+    def predict(self, sentence):
+        input_vec = self.vectorizer.transform([sentence]).toarray()
+        input_tensor = torch.tensor(input_vec, dtype=torch.float32)
+        with torch.no_grad():
+            output = self.model(input_tensor)
+            predicted = torch.argmax(output, dim=1).item()
+        return self.class_map.get(predicted)
+
+class NERDatasetAdvance(Dataset):
+    def __init__(self, X, Y):
+        self.X = X
+        self.Y = Y
+
+    def __len__(self):
+        return len(self.X)
+
+    def __getitem__(self, idx):
+        return self.X[idx], self.Y[idx]
+
+class NERModelAdvance(nn.Module):
+    def __init__(self, vocab_size, embed_dim, hidden_dim, tagset_size):
+        super().__init__()
+        self.embedding = nn.Embedding(vocab_size, embed_dim, padding_idx=0)
+        self.lstm = nn.LSTM(embed_dim, hidden_dim, batch_first=True, bidirectional=True)
+        self.fc = nn.Linear(hidden_dim * 2, tagset_size)
+
+    def forward(self, x):
+        embedded = self.embedding(x)
+        output, _ = self.lstm(embedded)
+        return self.fc(output)
+
+class NERTrainerAdvance:
+    def __init__(self, train_data, max_len=100):
+        self.max_len = max_len
+        self.train_data = train_data
+        self.word2idx = {}
+        self.tag2idx = {}
+        self.idx2tag = {}
+
+        self.build_vocab()
+        self.model = NERModelAdvance(len(self.word2idx), 64, 64, len(self.tag2idx))
+
+    def build_vocab(self):
+        word_counter = Counter()
+        tag_set = set()
+        for words, tags in self.train_data:
+            word_counter.update(words)
+            tag_set.update(tags)
+        self.word2idx = {w: i + 1 for i, w in enumerate(word_counter)}
+        self.word2idx["<PAD>"] = 0
+        self.tag2idx = {t: i for i, t in enumerate(tag_set)}
+        self.idx2tag = {i: t for t, i in self.tag2idx.items()}
+
+    def encode(self, words, tags):
+        x = [self.word2idx.get(w, 0) for w in words]
+        y = [self.tag2idx[t] for t in tags]
+        if len(x) < self.max_len:
+            pad_len = self.max_len - len(x)
+            x += [0] * pad_len
+            y += [self.tag2idx["O"]] * pad_len
+        return x[:self.max_len], y[:self.max_len]
+
+    def train(self, epochs=50, batch_size=2):
+        X, Y = [], []
+        for words, tags in self.train_data:
+            x, y = self.encode(words, tags)
+            X.append(x)
+            Y.append(y)
+
+        X = torch.tensor(X)
+        Y = torch.tensor(Y)
+        dataset = NERDatasetAdvance(X, Y)
+        loader = torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=True)
+
+        criterion = nn.CrossEntropyLoss()
+        optimizer = torch.optim.Adam(self.model.parameters(), lr=0.01)
+
+        for epoch in range(1, epochs + 1):
+            self.model.train()
+            total_loss = 0
+            for batch_x, batch_y in loader:
+                optimizer.zero_grad()
+                outputs = self.model(batch_x)
+                loss = criterion(outputs.view(-1, len(self.tag2idx)), batch_y.view(-1))
+                loss.backward()
+                optimizer.step()
+                total_loss += loss.item()
+            if epoch % 10 == 0:
+                print(f"Epoch {epoch} Loss: {total_loss:.4f}")
+        print("NER Training Complete!")
+
+    def predict(self, sentence):
+        self.model.eval()
+        tokens = word_tokenize(sentence)
+        encoded, _ = self.encode(tokens, ["O"] * len(tokens))
+        input_tensor = torch.tensor([encoded])
+        with torch.no_grad():
+            outputs = self.model(input_tensor)
+            predictions = torch.argmax(outputs, dim=2).squeeze().tolist()
+        entities = {"NAME": None, "AGE": None, "LOCATION": None}
+        for token, pred in zip(tokens, predictions):
+            label = self.idx2tag.get(pred, "O")
+            if label in entities and entities[label] is None:
+                entities[label] = token
+        return entities
+
 class ChatbotModel(nn.Module):
     def __init__(self, input_size, output_size):
         super(ChatbotModel, self).__init__()
@@ -338,7 +481,7 @@ class ChatbotAssistant:
 
         self.model = ChatbotModel(dimensions['input_size'], dimensions['output_size'])
         self.model.load_state_dict(torch.load(model_path, weights_only=True))
-        
+
     #@lru_cache(maxsize = None)
     def process_message(self, input_message):
         words = self.tokenize_and_lemmatizer(input_message)
@@ -377,14 +520,65 @@ class ChatbotAssistant:
         except Exception as e:
             return f"Error: {str(e)}"
 
+def predictFrameAdvance(sentence: str | None = None):
+    train_sentences = [
+    "How are you?",
+    "Open the door",
+    "The sun rises in the east",
+    "What time is it?",
+    "Close the window",
+    "She is reading a book",
+    "Is this your pen?",
+    "Start the engine",
+    "He likes football",
+    "Where do you live?",
+    "1+1 is 2",
+    "I am Divyanshu",
+    "Myself Divyanshu",
+    "Do you know",
+    "Shutdown /s /t 0",
+    "Mkdir",
+    "Start"
+    ]
+
+    frame_map = {0: "Statement", 1: "Question", 2: "Command", 3: "Answer", 4: "Name", 5: "Know", 6: "Shutdown", 7: "Make Dir", 8: "Start"}
+    train_labels = [1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 3, 4, 4, 5, 6, 7, 8]
+
+    predict_frames = FramePredictorAdvance(train_sentences, train_labels, frame_map)
+    return predict_frames.predict(sentence)
+
+def predictNER(sentence: str | None = ''):
+    train_data = [
+    (["My", "name", "is", "Aryan"],         ["O", "O", "O", "NAME"]),
+    (["My", "name", "is", "Divyanshu"],         ["O", "O", "O", "NAME"]),
+    (["My", "name", "is", "Vaishnavi"],         ["O", "O", "O", "NAME"]),
+    (["My", "name", "is", "Bhumi"],         ["O", "O", "O", "NAME"]),
+    (["My", "name", "is", "Yesh"],         ["O", "O", "O", "NAME"]),
+    (["I", "live", "in", "Jaipur"],         ["O", "O", "O", "LOCATION"]),
+    (["I", "am", "19", "years", "old"],     ["O", "O", "AGE", "O", "O"]),
+    (["She", "is", "Meera"],                ["O", "O", "NAME"]),
+    (["She", "stays", "in", "Goa"],         ["O", "O", "O", "LOCATION"]),
+    (["Age", "is", "24"],                   ["O", "O", "AGE"]),
+    (["I", "am", "Dev", "from", "Lucknow"], ["O", "O", "NAME", "O", "LOCATION"]),
+    (["I", "am", "Dev", "from", "Jamshedpur"], ["O", "O", "NAME", "O", "LOCATION"]),
+    (["I", "am", "Dev", "from", "Munger"], ["O", "O", "NAME", "O", "LOCATION"]),
+    (["I", "am", "Dev", "from", "Patna"], ["O", "O", "NAME", "O", "LOCATION"]),
+    (["I", "am", "Dev", "from", "Rachi"], ["O", "O", "NAME", "O", "LOCATION"]),
+    (["I", "am", "Dev", "from", "India"], ["O", "O", "NAME", "O", "LOCATION"]),
+    (["I", "am", "Dev", "from", "Jamalpur"], ["O", "O", "NAME", "O", "LOCATION"]),
+    (["born", "in", "2003"],                ["O", "O", "AGE"]),
+    (["I", "am", "Dev", "from", "Lucknow", ".", "My", "age", "is", "19"], ["O", "O", "NAME", "O", "LOCATION", "O", "O", "O", "O", "AGE"]),
+    ]
+
+    return NERTrainerAdvance(train_data).predict(sentence)
 
 class Brain:
     def __init__(self, intents_path: str = 'intents.json', **function_mapping):
-        assistant = ChatbotAssistant(data_file_path, function_mapping=function_mapping)
+        self.assistant = ChatbotAssistant(intents_path, function_mapping=function_mapping)
 
-        assistant.parse_intents()
-        assistant.prepare_data()
-        assistant.train_model(8, 0.001, 100)
+        self.assistant.parse_intents()
+        self.assistant.prepare_data()
+        self.assistant.train_model(8, 0.001, 100)
 
     def predict_message_type(self, message: str | None = None):
         '''It Returns:
@@ -410,4 +604,38 @@ class Brain:
         return predict_entities(message)
 
     def process_messages(self, message: str | None = None):
-        return assistant.process_message(message)
+        return self.assistant.process_message(message)
+
+class AdvanceBrain:
+    def __init__(self, intents_path: str | None = 'intents.json', **function_mapping):
+        self.assistant = ChatbotAssistant(intents_path, **function_mapping)
+        self.assistant.parse_intents()
+        self.assistant.prepare_data()
+        self.assistant.train_model(8, 0.001, 100)
+
+    def predict_message_type(self, message: str | None = None):
+        '''It Returns:
+            1. Statement.
+            2. Question.
+            3. Answer.
+            4. Command.
+            5. Shutdown.
+            6. Name.
+            7. Know.
+            8. Make Dir.
+            9. Start.'''
+        return predictFrameAdvance(message)
+
+    def predict_entitie(self, message: str | None = None):
+        '''It Returns:
+            1. NAME.
+            2. AGE.
+            3. LOCATION.'''
+        return predictNER(message)
+
+    def pyai_say(self, *message, **options):
+        print('PYAI :',*message, **options)
+        return ''
+
+    def process_messages(self, message: str | None = None):
+        return self.assistant.process_message(message)
