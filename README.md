@@ -6,17 +6,6 @@ Easy to use and opensource.
 ## Install
 
 ```python
-pip install PythonAI
-```
- Or,
-
-```python
-pip install pyai
-```
-
-Or,
-
-```python
 git clone https://github.com/World-Of-Programming-And-Technology/PythonAI.git
 ```
 
@@ -39,6 +28,7 @@ from pyai import Brain
 ## How to use it
 
 ```python
+from os import system
 from pyai import Brain
 
 brain = Brain('intents.json') # Enter Path of your dataset.
@@ -47,8 +37,11 @@ while True:
 	message = input('Message : ')
 	message_type = brain.predict_message_type(message)
 	
-	if message_type == 'Question':
+	if message_type == 'Question' or message_type == "Answer":
 		pyai_say(process_messages(message))
+
+	if message_type == "Shutdown":
+		system(message)
 ```
 
 And So on...
@@ -83,6 +76,8 @@ It can help you to perform AI projects based on NLP (Nature Language Processing)
 ```
 
 In this way you can create your intents.json  file. If you want you can add more data also.
+
+> Add in this formate only, otherwise program will through an error. (Remember)
 
 ## Python AI functions and objects. 
 
