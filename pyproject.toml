@@ -24,7 +24,8 @@ dependencies = [
   "scikit-learn",
   "pandas",
   "nltk",
-  "pyjokes", # remove if not used
+  "pyjokes",
+  "yfinance",# remove if not used
   "torch"        # remove if not used
 ]
 
