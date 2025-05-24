@@ -36,7 +36,7 @@ from pyai import Brain
 from os import system
 from pyai import Brain
 
-brain = Brain('intents.json') # Enter Path of your dataset.
+brain = Brain("your/dataset/path/intents.json") # Enter Path of your dataset.
 
 while True:
 	message = input('Message : ')
@@ -106,7 +106,7 @@ You can also use AdvanceBrain in it. It is Advance then Brain class in pyai
 
 from pyai import AdvanceBrain
 
-advance_brain = AdvanceBrain('intents.json') # You can also do AdvanceBrain() it also work.
+advance_brain = AdvanceBrain('your/dataset/path/intents.json') # You can also do AdvanceBrain() it also work.
 
 while True:
 	message = input('Message : ')
