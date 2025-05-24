@@ -6,6 +6,11 @@ Easy to use and opensource.
 ## Install
 
 ```python
+pip install pythonaibrain
+```
+Or,
+
+```python
 git clone https://github.com/World-Of-Programming-And-Technology/PythonAI.git
 ```
 
