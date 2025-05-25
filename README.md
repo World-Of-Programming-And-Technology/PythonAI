@@ -106,7 +106,7 @@ You can also use AdvanceBrain in it. It is Advance then Brain class in pyai
 
 from pyai import AdvanceBrain
 
-advance_brain = AdvanceBrain('your/dataset/path/intents.json') # You can also do AdvanceBrain() it also work.
+advance_brain = AdvanceBrain('your/dataset/path/intents.json') 
 
 while True:
 	message = input('Message : ')
